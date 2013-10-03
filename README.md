@@ -1,4 +1,4 @@
-respy    方便快捷的在 Python 中使用资源文件
+respy
 =====
 
 version 1.0
