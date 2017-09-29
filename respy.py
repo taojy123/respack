@@ -1,5 +1,6 @@
 
 import os
+from imp import reload
 
 
 # the default resources dir
@@ -12,12 +13,6 @@ def init_dir(resources_dir=RESOURCES_DIR):
         os.makedirs(resources_dir)
 
 
-def init_resources():
-    open("resources.py", "a")
-    if not open("resources.py").read():
-        open("resources.py", "w").write("res_dict={}")
-
-
 def set(resorce_file, target_name=None):
     """
     set the resource file into resources.py
@@ -28,32 +23,47 @@ def set(resorce_file, target_name=None):
         return
     if not target_name:
         target_name = os.path.split(resorce_file)[-1]
-    init_resources()
+
     bin_str = open(resorce_file, "rb").read()
-    read_str = open("resources.py").read()
-    out_str = read_str[:-1] + repr(target_name) + ":" + repr(bin_str) + ",\n}"
+
+    try:
+        import resources
+        reload(resources)
+        res_dict = resources.res_dict
+    except ImportError:
+        res_dict = {}
+
+    res_dict[target_name] = bin_str
+    res_data = repr(res_dict)
+    out_str = "res_dict=%s" % res_data
+
     open("resources.py", "w").write(out_str)
 
 
-def release(resources_dir=RESOURCES_DIR):
+def release(resources_dir=RESOURCES_DIR, cached=False):
     """ release the files in resources.py to resources dir (C:\respy_resources\) """
     try:
-        from resources import res_dict
-    except ImportError as e:
+        import resources
+        reload(resources)
+        res_dict = resources.res_dict
+    except ImportError:
         print('resources module not found!')
         res_dict = {}
 
     init_dir(resources_dir)
     for target_name, bin_str in res_dict.iteritems():
-        open(get(target_name, resources_dir, False), "wb").write(bin_str)
+        path = get(target_name, resources_dir, need_release=False)
+        if cached and not os.path.exists(path):
+            continue
+        open(path, "wb").write(bin_str)
 
     
-def get(target_name, resources_dir=RESOURCES_DIR, flag=True):
+def get(target_name, resources_dir=RESOURCES_DIR, cached=False, need_release=True):
     """ get target file path in resources dir (C:\respy_resources\) """
-    if flag:
-        release(resources_dir)
+    if need_release:
+        release(resources_dir, cached)
     path = os.path.join(resources_dir, target_name)
-    if not os.path.exists(path) and flag:
+    if not os.path.exists(path) and need_release:
         return '<not_exists>'
     return path
 
