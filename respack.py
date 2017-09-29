@@ -4,7 +4,7 @@ from imp import reload
 
 
 # the default resources dir
-RESOURCES_DIR = "C:\\respy_resources\\"
+RESOURCES_DIR = "C:\\packresources"
 
 
 def init_dir(resources_dir=RESOURCES_DIR):
@@ -41,7 +41,7 @@ def set(resorce_file, target_name=None):
 
 
 def release(resources_dir=RESOURCES_DIR, cached=False):
-    """ release the files in resources.py to resources dir (C:\respy_resources\) """
+    """ release the files in resources.py to resources dir (C:\packresources\) """
     try:
         import resources
         reload(resources)
@@ -59,7 +59,7 @@ def release(resources_dir=RESOURCES_DIR, cached=False):
 
     
 def get(target_name, resources_dir=RESOURCES_DIR, cached=False, need_release=True):
-    """ get target file path in resources dir (C:\respy_resources\) """
+    """ get target file path in resources dir (C:\packresources\) """
     if need_release:
         release(resources_dir, cached)
     path = os.path.join(resources_dir, target_name)
