@@ -1,3 +1,4 @@
+include demo.py
+include pic.jpg
 include README.md
-include LICENSE  
 include MANIFEST.in

@@ -4,7 +4,7 @@ from setuptools import setup
 
 setup(
     name='respack',
-    version='1.1',
+    version='1.2',
     description='Quick packaging of python resource files',
     long_description=open('README.md').read(),
     author='TaoJY',
