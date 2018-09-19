@@ -2,6 +2,9 @@ python 资源文件快捷打包
 ===========================
 
 
+[![PyPI Downloads](https://pypistats.com/badge/respack.png)](https://pypistats.com/package/respack)
+
+
 使用场景
 -----------------------------
 
